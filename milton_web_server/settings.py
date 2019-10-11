@@ -119,7 +119,10 @@ USE_TZ = True
 AWS_ACCESS_KEY_ID=os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY=os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_QUERYSTRING_AUTH = False
-DEFAULT_FILE_STORAGE='storages.backends.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME='com-devmoney-test'
+AWS_LOCATION=  'static'
+STATICFILES_STORAGE = 'storages.backends.S3Boto3Storage'
+DEFAULT_FILE_STORAGE= 'milton_web_server.s3_backend.MediaStorage'
 
 
 # Static files (CSS, JavaScript, Images)
