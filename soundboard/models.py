@@ -28,7 +28,7 @@ class Clip(models.Model):
 
     def save(self, *args, **kwargs):
         validators.FileTypeValidator(allowed_extensions=['audio/mpeg','audio/ogg']).__call__(self.sound)
-        super(Clip, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
     def __str__(self):
@@ -46,7 +46,7 @@ class Alias(models.Model):
 
     def save(self, *args, **kwargs): # validate, then save
         self.validate_unique()
-        super(Alias, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
