@@ -13,6 +13,9 @@ class Board(models.Model):
     name = models.TextField(primary_key=True, max_length=30)
     cover = models.ImageField(upload_to=board_upload_handler)
 
+    class Meta:
+        default_permissions = ('view')
+
     def __str__(self):
         return self.name
 
@@ -25,6 +28,7 @@ class Clip(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['name', 'board'], name='unique_board_clip')
         ]
+        default_permissions = ('view')
 
     def save(self, *args, **kwargs):
         validators.FileTypeValidator(allowed_extensions=['audio/mpeg','audio/ogg']).__call__(self.sound)
@@ -37,6 +41,9 @@ class Clip(models.Model):
 class Alias(models.Model):
     name = models.TextField(max_length=30)
     clip = models.ForeignKey(Clip, on_delete=models.CASCADE)
+
+    class Meta:
+        default_permissions = ('view')
 
     def validate_unique(self): # alias name cannot be the same as another alias or clip name on the same board
         if self.__class__.objects.filter(clip__board__name=self.clip.board.name,name=self.name).exists():
@@ -60,6 +67,7 @@ class Playlist(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['name','user'], name='unique_user_playlist')
         ]
+        default_permissions = ('view')
 
     def __str__(self):
         return self.name
@@ -73,6 +81,7 @@ class PlaylistClip(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['playlist','clip'], name='unique_playlist_clip')
         ]
+        # TODO make sure that default permissions don't need to be changed for this intermediate class
 
     def __str__(self):
         return self.playlist.name + ": " + self.clip.name
