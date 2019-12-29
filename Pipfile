@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+python-magic = "*"
+discord-py = {editable = true,extras = ["voice"],version = "*"}
+pytest-django = "*"
+django = {editable = true,version = "*"}
+django-storages = "*"
+django-cleanup = "*"
+pillow = "*"
+boto3 = "*"
+
+[requires]
+python_version = "3.7"

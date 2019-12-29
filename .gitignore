@@ -4,3 +4,5 @@
 db.sqlite3
 **/migrations/**
 **/tests/media
+accessKeys.csv
+.DS_Store

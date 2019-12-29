@@ -17,7 +17,7 @@ pytestmark = pytest.mark.django_db(transaction=True)
 class BoardTestCase(TransactionTestCase):
 
     def test_board(self):
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         assert board.cover.url is not None
         assert board.name == 'test'
@@ -25,10 +25,10 @@ class BoardTestCase(TransactionTestCase):
         assert default_storage.exists(board.cover.url) == False
 
     def test_clip(self):
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip.save()
         assert clip.sound.url is not None
         assert clip.name == 'test'
@@ -36,10 +36,10 @@ class BoardTestCase(TransactionTestCase):
         assert default_storage.exists(clip.sound.url) == False
 
     def test_alias_clip_name_conflict(self):
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip.save()
         alias = models.Alias(name='test', clip=clip)
         with pytest.raises(ValidationError):
@@ -47,13 +47,13 @@ class BoardTestCase(TransactionTestCase):
         board.delete()
 
     def test_alias_board_uniqueness_conflict(self):
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip.save()
         clip_to_conflict = models.Clip(name='test_conflict', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip_to_conflict.save()
         alias = models.Alias(name='test_alias', clip=clip)
         alias.save()
@@ -76,10 +76,10 @@ class BoardTestCase(TransactionTestCase):
         user.save()
         playlist = models.Playlist(name="test",user=user)
         playlist.save()
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip.save()
         playlist_clip = models.PlaylistClip(clip=clip, playlist=playlist)
         playlist_clip.save()
@@ -93,10 +93,10 @@ class BoardTestCase(TransactionTestCase):
         user.save()
         playlist = models.Playlist(name="test",user=user)
         playlist.save()
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip.save()
         playlist_clip = models.PlaylistClip(clip=clip, playlist=playlist,next=None)
         playlist_clip.save()
@@ -107,13 +107,13 @@ class BoardTestCase(TransactionTestCase):
         user.save()
         playlist = models.Playlist(name="test",user=user)
         playlist.save()
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip.save()
         clip_next = models.Clip(name='test_next', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip_next.save()
         playlist_clip_next = models.PlaylistClip(clip=clip_next,playlist=playlist,next=None)
         playlist_clip_next.save()
@@ -126,13 +126,13 @@ class BoardTestCase(TransactionTestCase):
         user.save()
         playlist = models.Playlist(name="test",user=user)
         playlist.save()
-        board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
+        board = models.Board(name='test', cover=File(name='nessa',file=open(media_location + 'nessa.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip.save()
         clip_next = models.Clip(name='test_next', board=board, sound=File(name='dunk',file=open(
-            media_location + 'dunk_hb.mp3','rb')))
+            media_location + 'school.mp3','rb')))
         clip_next.save()
         playlist_clip_next = models.PlaylistClip(clip=clip_next,playlist=playlist,next=None)
         playlist_clip_next.save()
