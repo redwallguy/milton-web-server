@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'storages',
     'soundboard',
+    'rest_framework',
     'django_cleanup.apps.CleanupConfig'
 ]
 
@@ -122,7 +123,7 @@ AWS_SECRET_ACCESS_KEY=os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_QUERYSTRING_AUTH = False
 AWS_STORAGE_BUCKET_NAME='com-devmoney-test'
 AWS_LOCATION=  'static'
-STATICFILES_STORAGE = 'storages.backends.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEFAULT_FILE_STORAGE= 'milton_web_server.s3_backend.MediaStorage'
 
 

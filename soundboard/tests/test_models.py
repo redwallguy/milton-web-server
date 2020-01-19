@@ -16,7 +16,7 @@ pytestmark = pytest.mark.django_db(transaction=True)
 
 class BoardTestCase(TransactionTestCase):
 
-    def test_board(self):
+    def test_board_cleanup(self):
         board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
         board.save()
         assert board.cover.url is not None
@@ -24,7 +24,7 @@ class BoardTestCase(TransactionTestCase):
         board.delete()
         assert default_storage.exists(board.cover.url) == False
 
-    def test_clip(self):
+    def test_clip_cleanup(self):
         board = models.Board(name='test', cover=File(name='pearl',file=open(media_location + 'pearl.jpg','rb')))
         board.save()
         clip = models.Clip(name='test', board=board, sound=File(name='dunk',file=open(
