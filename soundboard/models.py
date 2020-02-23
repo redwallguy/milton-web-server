@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from . import validators
+from enum import Enum
 
 def clip_upload_handler(instance, filename):
     return 'boards/{0}/clips/{1}/{2}'.format(instance.board.name,instance.name,filename)
@@ -12,9 +13,6 @@ def board_upload_handler(instance, filename):
 class Board(models.Model):
     name = models.TextField(primary_key=True, max_length=30)
     cover = models.ImageField(upload_to=board_upload_handler)
-
-    class Meta:
-        default_permissions = ('view')
 
     def __str__(self):
         return self.name
@@ -28,7 +26,6 @@ class Clip(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['name', 'board'], name='unique_board_clip')
         ]
-        default_permissions = ('view')
 
     def save(self, *args, **kwargs):
         validators.FileTypeValidator(allowed_extensions=['audio/mpeg','audio/ogg']).__call__(self.sound)
@@ -41,9 +38,6 @@ class Clip(models.Model):
 class Alias(models.Model):
     name = models.TextField(max_length=30)
     clip = models.ForeignKey(Clip, on_delete=models.CASCADE)
-
-    class Meta:
-        default_permissions = ('view')
 
     def validate_unique(self): # alias name cannot be the same as another alias or clip name on the same board
         if self.__class__.objects.filter(clip__board__name=self.clip.board.name,name=self.name).exists():
@@ -67,7 +61,6 @@ class Playlist(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['name','user'], name='unique_user_playlist')
         ]
-        default_permissions = ('view')
 
     def __str__(self):
         return self.name
@@ -85,3 +78,19 @@ class PlaylistClip(models.Model):
 
     def __str__(self):
         return self.playlist.name + ": " + self.clip.name
+
+class DiscordUser(models.Model):
+
+    class DiscordRole(models.TextChoices):
+        ADMIN = "A", "Admin"
+        MOD = "M", "Moderator"
+        BANNED = "B", "Banned"
+        NORMAL = "N", "Normal"
+
+
+    user_id = models.IntegerField(primary_key=True)
+    role = models.CharField(max_length=15, choices=DiscordRole.choices,default=DiscordRole.NORMAL)
+    intro = models.ForeignKey(Clip, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.user_id
