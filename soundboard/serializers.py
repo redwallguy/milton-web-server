@@ -20,6 +20,8 @@ class ClipSerializer(serializers.ModelSerializer):
         fields = ['name', 'board', 'sound']
 
 class BoardSerializer(serializers.ModelSerializer):
+    clips = serializers.StringRelatedField(many=True) # Makes clips returned as string representations rather than indices
+
     class Meta:
         model = Board
-        fields = ['name', 'cover']
+        fields = ['name', 'cover', 'clips']

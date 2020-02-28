@@ -19,7 +19,7 @@ class Board(models.Model):
 
 class Clip(models.Model):
     name = models.TextField(max_length=30)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, related_name='clips', on_delete=models.CASCADE)
     sound = models.FileField(validators=[validators.FileTypeValidator(allowed_extensions=['audio/mpeg','audio/ogg'])], upload_to=clip_upload_handler)
 
     class Meta:

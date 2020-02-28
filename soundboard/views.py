@@ -32,3 +32,4 @@ class BoardViewSet(viewsets.ModelViewSet):
     """
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+    filterset_fields = ('name',)
