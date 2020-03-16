@@ -25,6 +25,7 @@ class ClipViewSet(viewsets.ModelViewSet):
     """
     queryset = Clip.objects.all()
     serializer_class = ClipSerializer
+    filterset_fields=('name', 'board')
 
 class BoardViewSet(viewsets.ModelViewSet):
     """
