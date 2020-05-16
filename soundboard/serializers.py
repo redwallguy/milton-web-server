@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Clip, Board
+from .models import Clip, Board, DiscordUser
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,3 +25,8 @@ class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ['name', 'cover', 'clips']
+
+class DiscordUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscordUser
+        fields = ['user_id', 'role', 'intro']
