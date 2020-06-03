@@ -37,7 +37,7 @@ class Clip(models.Model):
 
 class Alias(models.Model):
     name = models.TextField(max_length=30)
-    clip = models.ForeignKey(Clip, on_delete=models.CASCADE)
+    clip = models.ForeignKey(Clip, related_name='aliases', on_delete=models.CASCADE)
 
     def validate_unique(self): # alias name cannot be the same as another alias or clip name on the same board
         if self.__class__.objects.filter(clip__board__name=self.clip.board.name,name=self.name).exists():
@@ -54,7 +54,7 @@ class Alias(models.Model):
 
 class Playlist(models.Model):
     name = models.TextField(max_length=50)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='playlists', on_delete=models.CASCADE)
     clips = models.ManyToManyField(Clip, through='PlaylistClip')
 
     class Meta:
