@@ -14,6 +14,7 @@ pillow = "*"
 python-magic = "*"
 django-cleanup = "*"
 boto3 = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.6"

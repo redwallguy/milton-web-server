@@ -44,8 +44,10 @@ class BoardViewSet(viewsets.ModelViewSet):
 
 class DiscordUserViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows Discord Users to be viewed or edited #TODO review whether or not viewing ability makes sense privacy-wise
+    API endpoint that allows Discord Users to be viewed or edited
     """
+    #TODO review whether or not viewing ability makes sense privacy-wise
+    
     queryset = DiscordUser.objects.all()
     serializer_class = DiscordUserSerializer
     filterset_fields = ('user_id', 'role')
