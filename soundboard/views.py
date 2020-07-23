@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from .models import Clip, Board, DiscordUser
-from .serializers import UserSerializer, GroupSerializer, ClipSerializer, BoardSerializer, DiscordUserSerializer, DiscordUserIntroUpdateSerializer
+from .serializers import UserSerializer, GroupSerializer, ClipSerializer, BoardSerializer, DiscordUserSerializer
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser
 
 import logging
 
@@ -46,29 +47,9 @@ class DiscordUserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Discord Users to be viewed or edited
     """
-    #TODO review whether or not viewing ability makes sense privacy-wise
+
+    permission_classes=[IsAdminUser]
     
     queryset = DiscordUser.objects.all()
     serializer_class = DiscordUserSerializer
     filterset_fields = ('user_id', 'role')
-
-    def destroy(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-        except NotFound:
-            pass
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    @action(detail=True, methods=['post'])
-    def set_intro(self, request, pk=None):
-        user = self.get_object()
-        logger.info(request.data)
-        serializer = DiscordUserIntroUpdateSerializer(user, data=request.data)
-        try:
-            serializer.update(instance=user, validated_data=request.data)
-            return Response({'status': 'Intro updated'})
-        except Exception as e:
-            logger.info(e)
-            return Response({'error': 'Intro update failed'},
-                            status=status.HTTP_400_BAD_REQUEST)

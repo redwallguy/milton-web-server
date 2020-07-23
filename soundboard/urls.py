@@ -13,7 +13,7 @@ router.register(r'discord-users', views.DiscordUserViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api-token-auth/', rest_framework.authtoken.views.obtain_auth_token)
+    path('api/', include(router.urls)), # Browsable API paths
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')), # DRF Authentication paths
+    path('api-token-auth/', rest_framework.authtoken.views.obtain_auth_token) # Path for generating token
 ]
