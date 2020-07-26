@@ -7,10 +7,20 @@ from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
+import boto3
+from botocore.exceptions import ClientError
+import os, re
 
 import logging
 
 logger = logging.getLogger(__name__)
+s3_client = boto3.client('s3')
+
+def parseKey(objectURL):
+    s3Regex = r"https://" + os.environ.get('AWS_STORAGE_BUCKET_NAME') + r"\.s3\.amazonaws\.com/"
+    key = re.sub(s3Regex, "", objectURL)
+    logger.info(key)
+    return key
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -34,6 +44,19 @@ class ClipViewSet(viewsets.ModelViewSet):
     queryset = Clip.objects.all()
     serializer_class = ClipSerializer
     filterset_fields=('name', 'board')
+
+    @action(detail=True)
+    def get_presigned_url(self, request, pk=None):
+        serialized_clip = ClipSerializer(self.get_object())
+        logger.info(serialized_clip.data.get('sound'))
+        response = None
+        try:
+            response = s3_client.generate_presigned_url('get_object',
+                                                        Params={'Bucket': os.environ.get('AWS_STORAGE_BUCKET_NAME'),
+                                                                'Key': parseKey(serialized_clip.data.get('sound'))})
+        except ClientError as e:
+            logger.info(e)
+        return Response(response)
 
 class BoardViewSet(viewsets.ModelViewSet):
     """

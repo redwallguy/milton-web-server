@@ -21,7 +21,8 @@ class GroupSerializer(serializers.ModelSerializer):
 class ClipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Clip
-        fields = ['name', 'board', 'sound']
+        fields = '__all__'  # auto-generated `id` field must be included for ability to perform instance operations on clips
+                            # due to how DRF router urls are auto-generated.
 
 class BoardSerializer(serializers.ModelSerializer):
     clips = ClipSerializer(many=True, required=False, read_only=True)
