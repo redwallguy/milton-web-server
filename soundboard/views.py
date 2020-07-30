@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from .models import Clip, Board, DiscordUser
-from .serializers import UserSerializer, GroupSerializer, ClipSerializer, BoardSerializer, DiscordUserSerializer
+from .models import Clip, Board, DiscordUser, Alias
+from .serializers import UserSerializer, GroupSerializer, ClipSerializer, BoardSerializer, DiscordUserSerializer, AliasSerializer
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
+
 import boto3
 from botocore.exceptions import ClientError
 import os, re
@@ -14,6 +15,7 @@ import os, re
 import logging
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 s3_client = boto3.client('s3')
 
 def parseKey(objectURL):
@@ -48,12 +50,12 @@ class ClipViewSet(viewsets.ModelViewSet):
     @action(detail=True)
     def get_presigned_url(self, request, pk=None):
         serialized_clip = ClipSerializer(self.get_object())
-        logger.info(serialized_clip.data.get('sound'))
         response = None
         try:
             response = s3_client.generate_presigned_url('get_object',
                                                         Params={'Bucket': os.environ.get('AWS_STORAGE_BUCKET_NAME'),
                                                                 'Key': parseKey(serialized_clip.data.get('sound'))})
+            logger.info(response)
         except ClientError as e:
             logger.info(e)
         return Response(response)
@@ -66,6 +68,20 @@ class BoardViewSet(viewsets.ModelViewSet):
     serializer_class = BoardSerializer
     filterset_fields = ('name',)
 
+class AliasViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows aliases to be viewed or edited.
+    """
+    queryset = Alias.objects.all()
+    serializer_class = AliasSerializer
+
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 class DiscordUserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Discord Users to be viewed or edited
@@ -76,3 +92,10 @@ class DiscordUserViewSet(viewsets.ModelViewSet):
     queryset = DiscordUser.objects.all()
     serializer_class = DiscordUserSerializer
     filterset_fields = ('user_id', 'role')
+
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data, partial=True) # This method must be overwritten with partial=True to prevent validation errors
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

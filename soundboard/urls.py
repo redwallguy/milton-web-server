@@ -9,6 +9,7 @@ router.register(r'groups', views.GroupViewSet)
 router.register(r'clips', views.ClipViewSet)
 router.register(r'boards', views.BoardViewSet)
 router.register(r'discord-users', views.DiscordUserViewSet)
+router.register(r'aliases', views.AliasViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
