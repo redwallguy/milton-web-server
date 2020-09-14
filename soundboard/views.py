@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
+from django.core.exceptions import ObjectDoesNotExist
 
 import boto3
 from botocore.exceptions import ClientError
@@ -81,6 +82,18 @@ class AliasViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=False)
+    def get_clip(self, request):
+        data = request.data
+        alias = None
+        try:
+            alias = Alias.objects.get(name=data.get('name'), board=data.get('board')) #Alias doesn't have board field, need a clip__board field or something
+        except ObjectDoesNotExist:
+            return Response("Could not find clip from alias.", status=status.HTTP_404_NOT_FOUND)
+        serialized_clip = ClipSerializer(alias.clip)
+        return Response(serialized_clip.data, status=status.HTTP_200_OK)
+
 
 class DiscordUserViewSet(viewsets.ModelViewSet):
     """
