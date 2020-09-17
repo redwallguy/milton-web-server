@@ -85,14 +85,14 @@ class AliasViewSet(viewsets.ModelViewSet):
 
     @action(detail=False)
     def get_clip(self, request):
-        data = request.data
+        data = request.query_params
         alias = None
         try:
-            alias = Alias.objects.get(name=data.get('name'), board=data.get('board')) #Alias doesn't have board field, need a clip__board field or something
+            alias = Alias.objects.get(name=data.get('name'), clip__board__name=data.get('board'))
         except ObjectDoesNotExist:
             return Response("Could not find clip from alias.", status=status.HTTP_404_NOT_FOUND)
         serialized_clip = ClipSerializer(alias.clip)
-        return Response(serialized_clip.data, status=status.HTTP_200_OK)
+        return Response(serialized_clip.data, status=status.HTTP_200_OK) # Returns as a single dict (i.e, {'id': 1, 'name': 'name', ...})
 
 
 class DiscordUserViewSet(viewsets.ModelViewSet):
