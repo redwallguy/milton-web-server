@@ -94,6 +94,18 @@ class AliasViewSet(viewsets.ModelViewSet):
         serialized_clip = ClipSerializer(alias.clip)
         return Response(serialized_clip.data, status=status.HTTP_200_OK) # Returns as a single dict (i.e, {'id': 1, 'name': 'name', ...})
 
+    @action(detail=False)
+    def get_from_board(self, request):
+        data = request.query_params
+        queryset = self.filter_queryset(Alias.objects.filter(clip__board__name=data.get('name'))) # Get queryset of aliases on this board
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class DiscordUserViewSet(viewsets.ModelViewSet):
     """
