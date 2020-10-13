@@ -68,19 +68,22 @@ class AliasSerializer(serializers.ModelSerializer):
         
 
 class DiscordUserSerializer(serializers.ModelSerializer):
-    intro = ClipSerializer(required=False)
+    intro = ClipSerializer(required=False, allow_null=True)
 
     def validate_intro(self, value):
-        board = None
-        try:
-            board = Board.objects.get(name=value.get('board'))
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(detail="Error retrieving board from name")
-        try:
-            clip = Clip.objects.get(name=value.get('name'), board=board)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(detail="Clip with query parameters could not be found")
-        return value
+        if value is None:
+            return value
+        else:
+            board = None
+            try:
+                board = Board.objects.get(name=value.get('board'))
+            except ObjectDoesNotExist:
+                raise serializers.ValidationError(detail="Error retrieving board from name")
+            try:
+                clip = Clip.objects.get(name=value.get('name'), board=board)
+            except ObjectDoesNotExist:
+                raise serializers.ValidationError(detail="Clip with query parameters could not be found")
+            return value
 
     class Meta:
         model = DiscordUser
@@ -89,10 +92,9 @@ class DiscordUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user_id = validated_data.get('user_id')
         role = validated_data.get('role', "N")
-
         intro = validated_data.get('intro')
         clip = None
-        if (intro):
+        if intro is not None:
             clip_name = intro.get('name')
             board = None
             try:
@@ -109,23 +111,28 @@ class DiscordUserSerializer(serializers.ModelSerializer):
         user_id = validated_data.get('user_id')
         if user_id is None:
             raise serializers.ValidationError
-        intro = validated_data.get('intro')
-        clip_name = intro.get('name')
+        role = validated_data.get('role', None)
+        intro = validated_data.get('intro', None)
         board = None
         clip = None
         discord_user_instance = None
-        try:
-            board = Board.objects.get(name=intro.get('board'))
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(detail="Error retrieving board from name")
-        try:
-            clip = Clip.objects.get(name=clip_name, board=board)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(detail="Clip with query parameters could not be found")
+        if intro is not None:
+            clip_name = intro.get('name')
+            try:
+                board = Board.objects.get(name=intro.get('board'))
+            except ObjectDoesNotExist:
+                raise serializers.ValidationError(detail="Error retrieving board from name")
+            try:
+                clip = Clip.objects.get(name=clip_name, board=board)
+            except ObjectDoesNotExist:
+                raise serializers.ValidationError(detail="Clip with query parameters could not be found")
         try:
             discord_user_instance = DiscordUser.objects.get(user_id=user_id)
         except ObjectDoesNotExist:
             raise serializers.ValidationError(detail="No user with id found")
+
+        if role is not None:
+            discord_user_instance.role = role
         discord_user_instance.intro = clip
         discord_user_instance.save()
         return discord_user_instance
