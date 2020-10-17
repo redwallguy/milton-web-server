@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from . import validators
 from enum import Enum
 
@@ -21,6 +22,7 @@ class Clip(models.Model):
     name = models.TextField(max_length=30)
     board = models.ForeignKey(Board, related_name='clips', on_delete=models.CASCADE)
     sound = models.FileField(validators=[validators.FileTypeValidator(allowed_extensions=['audio/mpeg','audio/ogg'])], upload_to=clip_upload_handler)
+    volume = models.IntegerField(default=100, validators=[MinValueValidator(1), MaxValueValidator(100)])
 
     class Meta:
         constraints = [
