@@ -1,0 +1,15 @@
+{% extends 'soundboard/base.html' %}
+
+{% block body %}
+
+<h1>Digest Boards</h1>
+<hr>
+<table border="1">
+	{% for board in boards %}
+	<tr>
+		<td><div class="sbcover" style="background-image:url('{{board.cover.url}}')"></div></td>
+		<td><a href="boards/{{board.name}}">{{board.name}}</a></td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
