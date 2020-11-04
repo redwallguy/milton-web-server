@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput;gunicorn -c config/gunicorn.py milton_web_server.wsgi
+web: python manage.py collectstatic --noinput;bin/start-nginx gunicorn -c config/gunicorn.py milton_web_server.wsgi
