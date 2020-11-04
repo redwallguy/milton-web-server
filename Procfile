@@ -1,1 +1,1 @@
-test: python manage.py runserver
+web: python manage.py collectstatic --noinput;gunicorn -c config/gunicorn.py milton_web_server.wsgi
