@@ -152,3 +152,6 @@ DEFAULT_FILE_STORAGE= 'milton_web_server.s3_backend.MediaStorage'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
+
+import django_on_heroku
+django_on_heroku.settings(locals())

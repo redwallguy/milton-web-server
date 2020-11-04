@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "*"
+djangorestframework = "*"
+pytest-django = "*"
+django-storages = "*"
+pillow = "*"
+python-magic = "*"
+django-cleanup = "*"
+boto3 = "*"
+django-filter = "*"
+django-on-heroku = "*"
+
+[requires]
+python_version = "3.6"
