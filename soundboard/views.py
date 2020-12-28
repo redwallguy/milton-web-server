@@ -63,7 +63,7 @@ def get_presigned_url_dict(board_name):
         board_presigned_dict['clips'][clip.name] = response
 
 def boards(request):
-    board_list = get_presigned_cover_list()
+    board_list = get_presigned_covers()
     return render(request, "soundboard/boards.html", context={"boards": board_list})
 
 def clips(request, board_name):
