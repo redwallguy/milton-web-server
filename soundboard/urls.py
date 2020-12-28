@@ -17,8 +17,8 @@ router.register(r'aliases', apiviews.AliasViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(views.boards)),
-    path('<board>/$', include(views.clips)),
+    path('', views.boards),
+    path('<board>/$', views.clips),
     path('api/', include(router.urls)), # Browsable API paths
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')), # DRF Authentication paths
     path('api-token-auth/', rest_framework.authtoken.views.obtain_auth_token), # Path for generating token
