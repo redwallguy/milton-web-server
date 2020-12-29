@@ -80,7 +80,7 @@ def clips(request, board_name):
     presigned_urls = get_presigned_url_dict(board_name)
     aliases = {}
     for clip in clip_set:
-        aliases[clip.name] = clip.alias_set.all()
+        aliases[clip.name] = clip.aliases.all()
     return render(request, "soundboard/clips.html", context={
         "board": board,
         "clips": clip_set,
