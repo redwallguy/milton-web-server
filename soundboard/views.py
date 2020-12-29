@@ -24,7 +24,7 @@ def get_presigned_covers(): # Returns list of objects with board name and presig
         try:
             response = s3_client.generate_presigned_url('get_object',
                                                         Params={'Bucket': os.environ.get('AWS_STORAGE_BUCKET_NAME'),
-                                                                'Key': parseKey(board.cover.name)})
+                                                                'Key': 'media/' + board.cover.name})
         except ClientError as e:
             logger.info(e)
         board_object = {
@@ -47,7 +47,7 @@ def get_presigned_url_dict(board_name):
     try: # Board cover url
         response = s3_client.generate_presigned_url('get_object',
                                                     Params={'Bucket': os.environ.get('AWS_STORAGE_BUCKET_NAME'),
-                                                            'Key': parseKey(board.cover.name)})
+                                                            'Key': 'media/' + board.cover.name})
     except ClientError as e:
         logger.info(e)
     board_presigned_dict['cover'] = response
@@ -58,7 +58,7 @@ def get_presigned_url_dict(board_name):
         try:
             response = s3_client.generate_presigned_url('get_object',
                                                         Params={'Bucket': os.environ.get('AWS_STORAGE_BUCKET_NAME'),
-                                                                'Key': parseKey(clip.sound)})
+                                                                'Key': parseKey(clip.sound.url)})
         except ClientError as e:
             logger.info(e)
         board_presigned_dict['clips'][clip.name] = response
