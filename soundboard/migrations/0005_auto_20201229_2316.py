@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('soundboard', '0004_clip_volume'),
+        ('soundboard'),
     ]
 
     operations = [
