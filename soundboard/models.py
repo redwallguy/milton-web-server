@@ -90,7 +90,7 @@ class DiscordUser(models.Model):
         NORMAL = "N", "Normal"
 
 
-    user_id = models.IntegerField(primary_key=True)
+    user_id = models.BigIntegerField(primary_key=True)
     role = models.CharField(max_length=15, choices=DiscordRole.choices,default=DiscordRole.NORMAL)
     intro = models.ForeignKey(Clip, null=True, on_delete=models.SET_NULL)
 
