@@ -2,7 +2,6 @@
 **/staticfiles
 **/__pycache__
 db.sqlite3
-**/migrations/**
 **/tests/media
 *.code-workspace
 Procfile.dev
