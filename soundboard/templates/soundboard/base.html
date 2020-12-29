@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html>
     {% load static %}
-    {% debug %}
 	<head><link rel="stylesheet" type="text/css" href="{% static "soundboard/css/soundboard.css" %}"></head>
 
 	<body>
@@ -14,5 +13,8 @@
 	{% block krippface%}
 	<div id="kripp_face" style="background-image:url('{% static "soundboard/img/kripp_face.png" %}');"></div>
 	{% endblock %}
-	</body>
+    </body>
+    <script>
+        console.log({% debug %});
+    </script>
 </html>

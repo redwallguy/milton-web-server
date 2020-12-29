@@ -32,6 +32,7 @@ def get_presigned_covers(): # Returns list of objects with board name and presig
             "cover": response
         }
         cover_presigned_list.append(board_object)
+    return cover_presigned_list
 
 def get_presigned_url_dict(board_name):
     board = None
@@ -61,6 +62,8 @@ def get_presigned_url_dict(board_name):
         except ClientError as e:
             logger.info(e)
         board_presigned_dict['clips'][clip.name] = response
+    
+    return board_presigned_dict
 
 def boards(request):
     board_list = get_presigned_covers()
