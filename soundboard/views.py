@@ -76,7 +76,7 @@ def clips(request, board_name):
         board = Board.objects.get(name=board_name)
     except:
         return render("404", status=status.HTTP_404_NOT_FOUND)
-    clip_set = board.clip_set.all()
+    clip_set = board.clips.all()
     presigned_urls = get_presigned_url_dict(board_name)
     aliases = {}
     for clip in clip_set:
